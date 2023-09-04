@@ -2,16 +2,20 @@
 using CinemaDB.Domain.Entities;
 
 namespace CinemaDB.Application.Movies.Queries;
-public record GetMovieListQuery : IRequest<List<Movie>>;
-public class GetMovieListQueryHandler : IRequestHandler<GetMovieListQuery, List<Movie>>
+public record GetMovieListQuery : IRequest<List<MovieDto>>;
+public class GetMovieListQueryHandler : IRequestHandler<GetMovieListQuery, List<MovieDto>>
 {
     private readonly IApplicationDbContext _context;
-    public GetMovieListQueryHandler(IApplicationDbContext context)
+    private readonly IMapper _mapper;
+    public GetMovieListQueryHandler(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
-    public Task<List<Movie>> Handle(GetMovieListQuery request, CancellationToken cancellationToken)
+    public async Task<List<MovieDto>> Handle(GetMovieListQuery request, CancellationToken cancellationToken)
     {
-        return _context.Movies.ToListAsync();
+        var data = await _context.Movies.Include(M => M.Director).ToListAsync();
+        var moviesvm = _mapper.Map<List<MovieDto>>(data);
+        return moviesvm;
     }
 }

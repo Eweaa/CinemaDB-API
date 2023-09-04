@@ -3,7 +3,6 @@ using CinemaDB.Application.Common.Interfaces;
 using CinemaDB.Infrastructure.Data;
 using CinemaDB.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-
 using NSwag;
 using NSwag.Generation.Processors.Security;
 using ZymLabs.NSwag.FluentValidation;

@@ -105,5 +105,56 @@ public class ApplicationDbContextInitialiser
 
             await _context.SaveChangesAsync();
         }
+
+        if (!_context.Actors.Any())
+        {
+            var actors = new List<Actor>()
+            {
+                new Actor(){Name="Robert De Niro", Birthdate = new DateTime(1943, 8, 17)},
+                new Actor(){Name="Leonard DiCaprio", Birthdate = new DateTime(1974, 11, 11)},
+                new Actor(){Name="Jamie Foxx", Birthdate = new DateTime(1997, 12, 13)},
+            };
+            _context.Actors.AddRange(actors);
+            await _context.SaveChangesAsync();
+        }
+
+        if (!_context.Movies.Any())
+        {
+            var movies = new List<Movie>()
+            {
+                new Movie(){Name="Killers of The Flower Moon", DirectorId=1, ReleaseDate=new DateTime(2023,10,19)},
+                new Movie(){Name="Goodfellas", DirectorId = 1, ReleaseDate = new DateTime(1990, 9, 19)},
+                new Movie(){Name="Django Unchained", DirectorId = 2, ReleaseDate = new DateTime(2013, 1, 16)},
+                new Movie(){Name="The Godfather", DirectorId = 2, ReleaseDate = new DateTime(1973, 7, 26)},
+            };
+            _context.Movies.AddRange(movies);
+            await _context.SaveChangesAsync();
+        }
+
+        if (!_context.Directors.Any())
+        {
+            var directors = new List<Director>()
+            {
+                new Director(){Name="Martin Scorsese", Birthdate = new DateTime(1942, 17, 11)},
+                new Director(){Name="Quentin Tarantino", Birthdate = new DateTime(1963, 3, 27)},
+            };
+            _context.Directors.AddRange(directors);
+            await _context.SaveChangesAsync();
+        }
+
+        //if (!_context.ActorMovie.Any())
+        //{
+        //    var actormovie = new List<ActorMovie>()
+        //    {
+        //        new ActorMovie(){ActorId=2, MovieId=1},
+        //        new ActorMovie(){ActorId=2, MovieId=2},
+        //        new ActorMovie(){ActorId=3, MovieId=1},
+        //        new ActorMovie(){ActorId=4, MovieId=3},
+        //        new ActorMovie(){ActorId=4, MovieId=3},
+        //    };
+        //    _context.ActorMovie.AddRange(actormovie);
+        //    await _context.SaveChangesAsync();
+        //}
+
     }
 }

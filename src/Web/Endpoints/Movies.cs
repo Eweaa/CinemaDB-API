@@ -2,6 +2,7 @@
 using CinemaDB.Application.Movies.Commands.DeleteMovie;
 using CinemaDB.Application.Movies.Queries;
 using CinemaDB.Domain.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CinemaDB.Web.Endpoints;
 
@@ -12,13 +13,19 @@ public class Movies : EndpointGroupBase
         app.MapGroup(this)
             //.RequireAuthorization()
             .MapGet(GetMovies)
+            .MapGet(GetMovie, "{id}")
             .MapPost(CreateMovie)
             //.MapPut(UpdateTodoItem, "{id}")
             //.MapPut(UpdateTodoItemDetail, "UpdateDetail/{id}")
             .MapDelete(DeleteMovie, "{id}");
     }
 
-    public async Task<List<Movie>> GetMovies(ISender sender, [AsParameters] GetMovieListQuery query)
+    public async Task<List<MovieDto>> GetMovies(ISender sender, [AsParameters] GetMovieListQuery query)
+    {
+        return await sender.Send(query);
+    }
+
+    public async Task<MovieDto> GetMovie(ISender sender, [AsParameters] GetMovieQuery query)
     {
         return await sender.Send(query);
     }

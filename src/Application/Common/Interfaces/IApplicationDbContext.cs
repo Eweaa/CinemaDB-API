@@ -9,6 +9,7 @@ public interface IApplicationDbContext
     DbSet<Actor> Actors { get; }
     DbSet<Director> Directors { get; }
     DbSet<Movie> Movies { get; }
+    //DbSet<User> User { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
