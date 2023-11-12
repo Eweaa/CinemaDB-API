@@ -1,6 +1,6 @@
 ﻿using CinemaDB.Application.Common.Interfaces;
 
-namespace CinemaDB.Application.Movies.Queries;
+namespace CinemaDB.Application.Movies.Queries.GetMovie;
 public record GetMovieQuery(int Id) : IRequest<MovieDto>;
 public class GetMovieQueryHandler : IRequestHandler<GetMovieQuery, MovieDto>
 {
@@ -13,7 +13,7 @@ public class GetMovieQueryHandler : IRequestHandler<GetMovieQuery, MovieDto>
     }
     public async Task<MovieDto> Handle(GetMovieQuery request, CancellationToken cancellationToken)
     {
-        var movie =  await _context.Movies.Where(m => m.Id == request.Id).Include(M => M.Director).FirstOrDefaultAsync();
+        var movie = await _context.Movies.Where(m => m.Id == request.Id).Include(M => M.Director).FirstOrDefaultAsync();
         var movievm = _mapper.Map<MovieDto>(movie);
         return movievm;
     }

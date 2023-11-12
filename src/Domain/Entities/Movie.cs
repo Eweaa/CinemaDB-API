@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CinemaDB.Domain.Entities;
+﻿namespace CinemaDB.Domain.Entities;
 public class Movie
 {
     public int Id { get; set; }
     public string? Name { get; set; }
-    public DateTime ReleaseDate { get; set; }
+    public DateTime? ReleaseDate { get; set; }
     public int DirectorId { get; set; }
     public Director Director { get; set; } = null!;
-    public List<Actor>? Actors { get; set; }
+    //public ICollection<Actor>? Actors { get; set; }
+    public ICollection<ActorMovie>? EActors { get; set; }
 }

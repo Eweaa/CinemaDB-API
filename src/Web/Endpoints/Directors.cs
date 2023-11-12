@@ -1,5 +1,6 @@
 ﻿using CinemaDB.Application.Directors.Commands.CreateDirector;
 using CinemaDB.Application.Directors.Commands.DeleteDirector;
+using CinemaDB.Application.Directors.Commands.UpdateDirector;
 using CinemaDB.Application.Directors.Queries;
 using CinemaDB.Domain.Entities;
 
@@ -13,7 +14,7 @@ public class Directors : EndpointGroupBase
             //.RequireAuthorization()
             .MapGet(GetDirectors)
             .MapPost(CreateDirector)
-            //.MapPut(UpdateTodoItem, "{id}")
+            .MapPut(UpdateDirector, "{id}")
             //.MapPut(UpdateTodoItemDetail, "UpdateDetail/{id}")
             .MapDelete(DeleteDirector, "{id}");
     }
@@ -25,6 +26,13 @@ public class Directors : EndpointGroupBase
     public async Task<int> CreateDirector(ISender sender, CreateDirectorCommand command)
     {
         return await sender.Send(command);
+    }
+
+    public async Task<IResult> UpdateDirector(ISender sender, int id, UpdateDirectorCommand command)
+    {
+        if (id != command.Id) return Results.BadRequest();
+        await sender.Send(command);
+        return Results.NoContent();
     }
 
     public async Task<IResult> DeleteDirector(ISender sender, int id)

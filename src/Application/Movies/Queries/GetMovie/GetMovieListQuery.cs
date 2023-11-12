@@ -1,7 +1,7 @@
 ﻿using CinemaDB.Application.Common.Interfaces;
 using CinemaDB.Domain.Entities;
 
-namespace CinemaDB.Application.Movies.Queries;
+namespace CinemaDB.Application.Movies.Queries.GetMovie;
 public record GetMovieListQuery : IRequest<List<MovieDto>>;
 public class GetMovieListQueryHandler : IRequestHandler<GetMovieListQuery, List<MovieDto>>
 {

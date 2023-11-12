@@ -61,7 +61,80 @@
         }
       }
     },
-    "/api/Actors/{id}": {
+    "/api/Actors/movies/{Id}": {
+      "get": {
+        "tags": [
+          "Actors"
+        ],
+        "operationId": "GetActorMovies",
+        "parameters": [
+          {
+            "name": "Id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ActorMoviesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Actors/update/{id}": {
+      "put": {
+        "tags": [
+          "Actors"
+        ],
+        "operationId": "UpdateActor",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateActorCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/api/Actors/delete/{id}": {
       "delete": {
         "tags": [
           "Actors"
@@ -252,6 +325,42 @@
           }
         }
       },
+      "put": {
+        "tags": [
+          "Movies"
+        ],
+        "operationId": "UpdateMovie",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "requestBody": {
+          "x-name": "command",
+          "description": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMovieCommand"
+              }
+            }
+          },
+          "required": true,
+          "x-position": 2
+        },
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        }
+      },
       "delete": {
         "tags": [
           "Movies"
@@ -272,6 +381,64 @@
         "responses": {
           "200": {
             "description": ""
+          }
+        }
+      }
+    },
+    "/api/Movies/actors/{id}": {
+      "get": {
+        "tags": [
+          "Movies"
+        ],
+        "operationId": "GetMovieActors",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            },
+            "x-position": 1
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MovieActorsDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TvSeries": {
+      "get": {
+        "tags": [
+          "TvSeries"
+        ],
+        "operationId": "GetTvSeries",
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TvSeries"
+                  }
+                }
+              }
+            }
           }
         }
       }
@@ -676,13 +843,49 @@
           },
           "birthdate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "movies": {
             "type": "array",
+            "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/Movie"
+              "$ref": "#/components/schemas/ActorMovie"
             }
+          }
+        }
+      },
+      "ActorMovie": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actor": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Actor"
+              }
+            ]
+          },
+          "movieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "movie": {
+            "nullable": true,
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/Movie"
+              }
+            ]
           }
         }
       },
@@ -700,7 +903,8 @@
           },
           "releaseDate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "directorId": {
             "type": "integer",
@@ -709,11 +913,11 @@
           "director": {
             "$ref": "#/components/schemas/Director"
           },
-          "actors": {
+          "eActors": {
             "type": "array",
             "nullable": true,
             "items": {
-              "$ref": "#/components/schemas/Actor"
+              "$ref": "#/components/schemas/ActorMovie"
             }
           }
         }
@@ -732,7 +936,8 @@
           },
           "birthdate": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "movies": {
             "type": "array",
@@ -743,12 +948,49 @@
           }
         }
       },
+      "ActorMoviesDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "movieId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "movieTitle": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "CreateActorCommand": {
         "type": "object",
         "additionalProperties": false,
         "properties": {
           "name": {
             "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "UpdateActorCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "birthdate": {
+            "type": "string",
+            "format": "date-time",
             "nullable": true
           }
         }
@@ -789,6 +1031,24 @@
           }
         }
       },
+      "MovieActorsDto": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actorId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "actorName": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
       "CreateMovieCommand": {
         "type": "object",
         "additionalProperties": false,
@@ -800,6 +1060,106 @@
           "directorId": {
             "type": "integer",
             "format": "int32"
+          }
+        }
+      },
+      "UpdateMovieCommand": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "title": {
+            "type": "string",
+            "nullable": true
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "directorId": {
+            "type": "integer",
+            "format": "int32"
+          }
+        }
+      },
+      "TvSeries": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "seasons": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Season"
+            }
+          }
+        }
+      },
+      "Season": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "releaseDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "episodes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Episode"
+            }
+          },
+          "tvSeriesId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "tvSeries": {
+            "$ref": "#/components/schemas/TvSeries"
+          }
+        }
+      },
+      "Episode": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "seasonId": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "season": {
+            "$ref": "#/components/schemas/Season"
           }
         }
       },

@@ -1,6 +1,6 @@
 ﻿using CinemaDB.Domain.Entities;
 
-namespace CinemaDB.Application.Movies.Queries;
+namespace CinemaDB.Application.Movies.Queries.GetMovie;
 public class MovieDto
 {
     public int Id { get; set; }

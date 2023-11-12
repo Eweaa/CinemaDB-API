@@ -65,6 +65,7 @@ public class ApplicationDbContextInitialiser
         }
     }
 
+    public async Task TrySeedAsync2() { await Task.CompletedTask; }
     public async Task TrySeedAsync()
     {
         // Default roles
@@ -102,47 +103,42 @@ public class ApplicationDbContextInitialiser
                     new TodoItem { Title = "Reward yourself with a nice, long nap 🏆" },
                 }
             });
-
-            await _context.SaveChangesAsync();
         }
 
-        if (!_context.Actors.Any())
-        {
-            var actors = new List<Actor>()
-            {
-                new Actor(){Name="Robert De Niro", Birthdate = new DateTime(1943, 8, 17)},
-                new Actor(){Name="Leonard DiCaprio", Birthdate = new DateTime(1974, 11, 11)},
-                new Actor(){Name="Jamie Foxx", Birthdate = new DateTime(1997, 12, 13)},
-            };
-            _context.Actors.AddRange(actors);
-            await _context.SaveChangesAsync();
-        }
+        //if (!_context.Actors.Any())
+        //{
+        //    var actors = new List<Actor>()
+        //    {
+        //        new Actor(){Name="Robert De Niro", Birthdate = new DateTime(1943, 08, 17, 0, 0, 0)},
+        //        new Actor(){Name="Leonard DiCaprio", Birthdate = new DateTime(1974, 11, 11, 0, 0, 0)},
+        //        new Actor(){Name="Jamie Foxx", Birthdate = new DateTime(1997, 12, 13, 0 , 0, 0)},
+        //    };
+        //    _context.Actors.AddRange(actors);
+        //}
 
-        if (!_context.Movies.Any())
-        {
-            var movies = new List<Movie>()
-            {
-                new Movie(){Name="Killers of The Flower Moon", DirectorId=1, ReleaseDate=new DateTime(2023,10,19)},
-                new Movie(){Name="Goodfellas", DirectorId = 1, ReleaseDate = new DateTime(1990, 9, 19)},
-                new Movie(){Name="Django Unchained", DirectorId = 2, ReleaseDate = new DateTime(2013, 1, 16)},
-                new Movie(){Name="The Godfather", DirectorId = 2, ReleaseDate = new DateTime(1973, 7, 26)},
-            };
-            _context.Movies.AddRange(movies);
-            await _context.SaveChangesAsync();
-        }
+        //if (!_context.Movies.Any())
+        //{
+        //    var movies = new List<Movie>()
+        //    {
+        //        new Movie(){Name="Killers of The Flower Moon", DirectorId=1, ReleaseDate = new DateTime(2023, 10, 19, 0, 0, 0)},
+        //        new Movie(){Name="Goodfellas", DirectorId = 1, ReleaseDate = new DateTime(1990, 09, 19, 0, 0, 0)},
+        //        new Movie(){Name="Django Unchained", DirectorId = 2, ReleaseDate = new DateTime(2013, 01, 16, 0, 0, 0)},
+        //        new Movie(){Name="The Godfather", DirectorId = 2, ReleaseDate = new DateTime(1973, 07, 26, 0, 0 ,0)},
+        //    };
+        //    _context.Movies.AddRange(movies);
+        //}
 
-        if (!_context.Directors.Any())
-        {
-            var directors = new List<Director>()
-            {
-                new Director(){Name="Martin Scorsese", Birthdate = new DateTime(1942, 17, 11)},
-                new Director(){Name="Quentin Tarantino", Birthdate = new DateTime(1963, 3, 27)},
-            };
-            _context.Directors.AddRange(directors);
-            await _context.SaveChangesAsync();
-        }
+        //if (!_context.Directors.Any())
+        //{
+        //    var directors = new List<Director>()
+        //    {
+        //        new Director(){Name="Martin Scorsese", Birthdate = new DateTime(1942, 11, 17, 0, 0, 0)},
+        //        new Director(){Name="Quentin Tarantino", Birthdate = new DateTime(1963, 03, 27, 0, 0, 0)},
+        //    };
+        //    _context.Directors.AddRange(directors);
+        //}
 
-        //if (!_context.ActorMovie.Any())
+        //if (!_context.ActorMovies.Any())
         //{
         //    var actormovie = new List<ActorMovie>()
         //    {
@@ -152,9 +148,47 @@ public class ApplicationDbContextInitialiser
         //        new ActorMovie(){ActorId=4, MovieId=3},
         //        new ActorMovie(){ActorId=4, MovieId=3},
         //    };
-        //    _context.ActorMovie.AddRange(actormovie);
-        //    await _context.SaveChangesAsync();
+        //    _context.ActorMovies.AddRange(actormovie);
         //}
 
+        //if (!_context.TvSeries.Any())
+        //{
+        //    var TvSerieses = new List<TvSeries>()
+        //    {
+        //        new TvSeries(){Name="Succession", ReleaseDate = new DateTime(2018, 08, 08, 0, 0, 0) ,},
+        //        new TvSeries(){Name="The Sopranos", ReleaseDate = new DateTime(1999, 08, 08, 0, 0, 0)},
+        //    };
+        //    _context.TvSeries.AddRange(TvSerieses);
+        //}
+
+        //if (!_context.Seasons.Any())
+        //{
+        //    var Seasons = new List<Season>()
+        //    {
+        //        new Season(){ Name = "S1", ReleaseDate = new DateTime(2018, 08, 08, 0, 0, 0)},
+        //        new Season(){ Name = "S2", ReleaseDate = new DateTime(2019, 08, 08, 0, 0, 0)},
+        //        new Season(){ Name = "S3", ReleaseDate = new DateTime(2021, 08, 08, 0, 0, 0)},
+        //        new Season(){ Name = "S4", ReleaseDate = new DateTime(2023, 08, 08, 0, 0, 0)},
+        //    };
+        //    _context.Seasons.AddRange(Seasons);
+        //}
+
+        //if (!_context.Episodes.Any())
+        //{
+        //    var Episodes = new List<Episode>()
+        //    {
+        //        new Episode(){Name="Celebration", },
+        //        new Episode(){Name="Shit Show at the Fuck Factory", },
+        //        new Episode(){Name="The Summer Palace", },
+        //        new Episode(){Name="Vaulter", },
+        //        new Episode(){Name="Secession", },
+        //        new Episode(){Name="Mass in Time of War", },
+        //        new Episode(){Name="The Munsters", },
+        //        new Episode(){Name="Rehearsal", },
+        //    };
+        //    _context.Episodes.AddRange(Episodes);
+        //}
+
+        _context.SaveChanges();
     }
 }

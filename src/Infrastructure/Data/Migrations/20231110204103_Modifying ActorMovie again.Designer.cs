@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CinemaDB.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230904151311_Fixing Director Take1")]
-    partial class FixingDirectorTake1
+    [Migration("20231110204103_Modifying ActorMovie again")]
+    partial class ModifyingActorMovieagain
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,21 @@ namespace CinemaDB.Infrastructure.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ActorMovie", b =>
+                {
+                    b.Property<int>("ActorsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("MoviesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ActorsId", "MoviesId");
+
+                    b.HasIndex("MoviesId");
+
+                    b.ToTable("ActorMovie");
+                });
+
             modelBuilder.Entity("CinemaDB.Domain.Entities.Actor", b =>
                 {
                     b.Property<int>("Id")
@@ -33,7 +48,7 @@ namespace CinemaDB.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Birthdate")
+                    b.Property<DateTime?>("Birthdate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -46,23 +61,25 @@ namespace CinemaDB.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("CinemaDB.Domain.Entities.ActorMovie", b =>
                 {
-                    b.Property<int>("ActorsId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("MoviesId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ActorId")
                         .HasColumnType("int");
 
-                    b.Property<long>("ActorId")
-                        .HasColumnType("bigint");
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
 
-                    b.Property<long>("MovieId")
-                        .HasColumnType("bigint");
+                    b.HasKey("Id");
 
-                    b.HasKey("ActorsId", "MoviesId");
+                    b.HasIndex("ActorId");
 
-                    b.HasIndex("MoviesId");
+                    b.HasIndex("MovieId");
 
-                    b.ToTable("ActorMovie");
+                    b.ToTable("ActorMovies");
                 });
 
             modelBuilder.Entity("CinemaDB.Domain.Entities.Director", b =>
@@ -73,7 +90,7 @@ namespace CinemaDB.Infrastructure.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Birthdate")
+                    b.Property<DateTime?>("Birthdate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -82,6 +99,27 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Directors");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.Episode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("SeasonId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SeasonId");
+
+                    b.ToTable("Episodes");
                 });
 
             modelBuilder.Entity("CinemaDB.Domain.Entities.Movie", b =>
@@ -98,7 +136,7 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ReleaseDate")
+                    b.Property<DateTime?>("ReleaseDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -106,6 +144,30 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.HasIndex("DirectorId");
 
                     b.ToTable("Movies");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.Season", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("TvSeriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TvSeriesId");
+
+                    b.ToTable("Seasons");
                 });
 
             modelBuilder.Entity("CinemaDB.Domain.Entities.TodoItem", b =>
@@ -183,6 +245,25 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TodoLists");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.TvSeries", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ReleaseDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("TvSeries");
                 });
 
             modelBuilder.Entity("CinemaDB.Infrastructure.Identity.ApplicationUser", b =>
@@ -383,7 +464,7 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("CinemaDB.Domain.Entities.ActorMovie", b =>
+            modelBuilder.Entity("ActorMovie", b =>
                 {
                     b.HasOne("CinemaDB.Domain.Entities.Actor", null)
                         .WithMany()
@@ -398,6 +479,36 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("CinemaDB.Domain.Entities.ActorMovie", b =>
+                {
+                    b.HasOne("CinemaDB.Domain.Entities.Actor", "Actor")
+                        .WithMany()
+                        .HasForeignKey("ActorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("CinemaDB.Domain.Entities.Movie", "Movie")
+                        .WithMany()
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Actor");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.Episode", b =>
+                {
+                    b.HasOne("CinemaDB.Domain.Entities.Season", "Season")
+                        .WithMany("Episodes")
+                        .HasForeignKey("SeasonId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Season");
+                });
+
             modelBuilder.Entity("CinemaDB.Domain.Entities.Movie", b =>
                 {
                     b.HasOne("CinemaDB.Domain.Entities.Director", "Director")
@@ -407,6 +518,17 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Director");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.Season", b =>
+                {
+                    b.HasOne("CinemaDB.Domain.Entities.TvSeries", "TvSeries")
+                        .WithMany("Seasons")
+                        .HasForeignKey("TvSeriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TvSeries");
                 });
 
             modelBuilder.Entity("CinemaDB.Domain.Entities.TodoItem", b =>
@@ -499,9 +621,19 @@ namespace CinemaDB.Infrastructure.Data.Migrations
                     b.Navigation("Movies");
                 });
 
+            modelBuilder.Entity("CinemaDB.Domain.Entities.Season", b =>
+                {
+                    b.Navigation("Episodes");
+                });
+
             modelBuilder.Entity("CinemaDB.Domain.Entities.TodoList", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("CinemaDB.Domain.Entities.TvSeries", b =>
+                {
+                    b.Navigation("Seasons");
                 });
 #pragma warning restore 612, 618
         }
